@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block css %}
+<style>
+    a:link {
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+
+<h1 class="text-center">
+    Blogs
+</h1>
+
+<hr>
+
+<button type="submit" class="btn btn-light float-right">
+    <a href="{% url 'blog:add_blog'%}">Add Blog</a>
+</button>
+
+<div class="card">
+    <div class="card-body">
+        {% csrf_token %}
+
+        {% for blog in blogs %}
+        <h1>{{blog.id}}
+            <a href="{% url 'blog:blog_post' blog.id%}">
+                {{blog.title}}
+            </a>
+        </h1>
+        <h4>
+            {{blog.author}} | {{blog.date_created}}
+        </h4>
+        <p>
+            {{blog.content}}
+        </p>
+        {% endfor %}
+        <hr>
+
+    </div>
+</div>
+{% endblock %}

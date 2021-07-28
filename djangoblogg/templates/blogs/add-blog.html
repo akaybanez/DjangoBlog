@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Add Blog {% endblock %}
+
+{% block content %}
+<h1 class="text-center">
+    Add Blog
+</h1>
+
+<br>
+
+<div class="col md-5">
+    <form method="POST" class="post-form" action="{%url 'blog:add_blog'%}" novalidate>
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-group">
+
+            <label for="formGroupExampleInput" class="form-label">
+                <b>{{ field.label_tag }}</b>
+            </label>
+
+            {{ field|add_class:"form-control" }}
+
+            <br>
+
+            {% for error in field.errors %}
+            <p id="error-span" class="text-danger" style="color: red;">
+                {{error}}
+            </p>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">
+            Submit
+        </button>
+
+    </form>
+</div>
+
+
+{% endblock %}

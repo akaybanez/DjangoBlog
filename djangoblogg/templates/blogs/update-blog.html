@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Update Blog Post {% endblock %}
+
+{% block navbar %} {% endblock %}
+
+{% block content %}
+
+
+<h1 class="text-center">
+    Update Blog
+</h1>
+
+<br>
+
+<div class="card">
+    <div class="card-body">
+        <!-- kung walay action, post will send it to the url where the form was rendered -->
+        <form method="POST" class="post-form" novalidate>
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class=" form-group">
+                <label for="formGroupExampleInput" class="form-label">
+                    <b>{{ field.label_tag }}</b>
+                </label>
+
+                {{ field|add_class:"form-control" }}
+
+                <br>
+                {% for error in field.errors %}
+                <p id="error-span" class="text-danger" style="color: red;">
+                    {{error}}
+                </p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <br>
+
+            <button type="submit" class="btn btn-primary">
+                Submit
+            </button>
+        </form>
+
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block javascript %} {% endblock %}

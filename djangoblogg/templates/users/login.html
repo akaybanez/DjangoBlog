@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Login {% endblock %}
+
+{% block header %} {% endblock %}
+
+<h1 class="text-center">
+    Login
+</h1>
+
+{% block content %}
+
+<div class="card col-md-5" style="margin:0 auto;">
+    <div class="card-body">
+        <h4 style="text-align: center;">Login</h4>
+
+        <hr>
+
+        <form method="POST" class="post-form" action="{%url 'users:login'%}" novalidate>
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="form-group">
+
+
+                <label for="formGroupExampleInput" class="form-label">
+                    <b>{{ field.label_tag }}</b>
+                </label>
+
+                {{ field|add_class:"form-control" }}
+                <br>
+
+                {% for error in field.errors %}
+                <p style="color: red;">{{error}}</p>
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                <ul class='form-errors'>
+                    {% for error in form.non_field_errors %}
+                    <p style="color: red;">{{error}}</p>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">
+                Submit
+            </button>
+
+            <br>
+            <br>
+
+            <p style="text-align: center;">
+                Don't have an account? Sign up <a href="{% url 'users:signup'%}">here.</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %} {% endblock %}
+
+{% block javascript %} {% endblock %}

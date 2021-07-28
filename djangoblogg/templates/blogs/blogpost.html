@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block css %}
+<style>
+    a:link {
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block title %} Blog Post {% endblock %}
+
+{% block content %}
+<h1 class="text-center">Blog Details</h1>
+
+<hr>
+
+<button type="submit" class="btn btn-light align-center">
+    <a href="{% url 'blog:dashboard'%}">
+        Back
+    </a>
+</button>
+
+{% if request.user.is_superuser or request.user == post.author %}
+<button type="submit" class="btn btn-light align-center">
+    <a href="{% url 'blog:update_blog' post.id%}">
+        Update
+    </a>
+</button>
+
+<button type="submit" class="btn btn-light align-center">
+    <a href="{% url 'blog:delete_blog' post.id%}">
+        Delete
+    </a>
+</button>
+{% endif %}
+
+<button type="submit" class="btn btn-light align-center float-right">
+    <a href="{% url 'blog:blog_likes' post.id%}">
+        Like Post
+    </a>
+</button>
+
+
+<div class="card">
+    <div class="card-body">
+        {% csrf_token %}
+        <h1>
+            {{post.title}}
+        </h1>
+
+        <h5>
+            {{post.author}} | {{post.date_created}}
+        </h5>
+
+        <br>
+
+        <p>
+            {{post.content}}
+        </p>
+
+        <br>
+
+        <h6>
+            Likes: {{likes}}
+        </h6>
+
+    </div>
+
+    <div class="card-body">
+        <h6>
+            Comments
+        </h6>
+
+        <form method="POST" class="post-form" action="{% url 'blog:comments' post.id %}" novalidate>
+            {% csrf_token %}
+
+            <div class="form-group">
+                {{form.content |add_class:"form-control" | attr:"placeholder: Add Comment" | attr:"rows: 1"}}
+            </div>
+
+            {% for error in form.content.errors %}
+            <br>
+            <p id="error-span" class="text-danger" style="color: red;">
+                {{error}}
+            </p>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">
+                Submit
+            </button>
+
+        </form>
+    </div>
+
+    {% csrf_token %}
+    {% for comment in comments %}
+    <div class="card-body">
+        <p>
+            <b>{{comment.user}}</b> | {{comment.date_created}}
+        </p>
+
+        <p id="comment">
+            {{comment.content}}
+        </p>
+
+        {% if request.user.is_superuser or request.user == comment.user %}
+        <button type="submit" class="btn btn-light align-center">
+            <a href="{% url 'blog:update_comment' comment.id%}">
+                Update
+            </a>
+        </button>
+
+        <button type="submit" class="btn btn-light float-right">
+            <a href="{% url 'blog:comments' comment.id%}">
+                Delete
+            </a>
+        </button>
+        {% endif %}
+
+        <hr>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
